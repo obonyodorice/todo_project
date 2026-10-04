@@ -1,0 +1,13 @@
+{% extends "./base.html" %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-8 col-lg-5">
+  <div class="card shadow-sm text-center p-4 rise">
+    <h4>Delete “{{ object }}”?</h4>
+    <p class="text-muted">This can't be undone, and anything linked to it will be deleted too.</p>
+    <form method="post">{% csrf_token %}
+      <button class="btn btn-danger">Yes, delete</button>
+      <a class="btn btn-secondary" href="javascript:history.back()">Keep it</a>
+    </form>
+  </div>
+</div></div>
+{% endblock %}

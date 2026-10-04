@@ -1,0 +1,73 @@
+{% extends "./base.html" %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 rise">
+  <h2 class="m-0 text-capitalize">{{ title }}</h2>
+  <div class="d-flex flex-wrap align-items-center gap-3">
+    {% if name == 'assignment' or name == 'revisiontopic' %}
+    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" id="hideDone"><label class="form-check-label" for="hideDone">Hide completed</label></div>
+    {% endif %}
+    {% if groups %}
+    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" id="expandAll"><label class="form-check-label" for="expandAll">Expand all</label></div>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url name|add:'_add' %}">+ Add</a>
+  </div>
+</div>
+
+{% if groups %}
+<div class="accordion" id="items">
+  {% for label, objs in groups %}
+  <div class="accordion-item rise" style="--i:{{ forloop.counter0 }}" data-label="{{ label }}">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g{{ forloop.counter }}">
+        <span class="flex-grow-1">{{ label }}</span><span class="badge bg-primary me-2">{{ objs|length }}</span>
+      </button>
+    </h2>
+    <div id="g{{ forloop.counter }}" class="accordion-collapse collapse">
+      <div class="list-group list-group-flush">
+        {% for obj in objs %}
+        <div class="list-group-item item d-flex align-items-center gap-3 {% if obj.done == True %}done{% endif %}" style="--i:{{ forloop.counter0 }}">
+          {% if obj.done == True or obj.done == False %}
+          <div class="form-check form-switch m-0"><input class="form-check-input toggle" type="checkbox" role="switch" data-url="{% url name|add:'_toggle' obj.pk %}" {% if obj.done %}checked{% endif %}></div>
+          {% endif %}
+          <div class="flex-grow-1">
+            <div class="label fw-semibold">{{ obj.headline|default:obj }}</div>
+            {% if obj.details %}<div class="small text-muted">{{ obj.details|join:" · " }}</div>{% endif %}
+          </div>
+          {% if obj.link %}<a href="{{ obj.link }}" target="_blank" rel="noopener">Open ↗</a>{% endif %}
+          <a class="btn btn-sm btn-outline-primary" href="{% url name|add:'_edit' obj.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url name|add:'_delete' obj.pk %}">Delete</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card p-5 text-center text-muted rise">Nothing here yet. Add your first one! ✨</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const items = document.getElementById("items");
+  const hideDone = document.getElementById("hideDone");
+  const expandAll = document.getElementById("expandAll");
+  const panel = g => bootstrap.Collapse.getOrCreateInstance(g.querySelector(".accordion-collapse"), { toggle: false });
+
+  if (hideDone) hideDone.onchange = () => items && items.classList.toggle("hide-done", hideDone.checked);
+  if (expandAll) expandAll.onchange = () => items.querySelectorAll(".accordion-item").forEach(g => expandAll.checked ? panel(g).show() : panel(g).hide());
+
+  // tag today's day on the timetable
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  document.querySelectorAll(`[data-label="${today}"] .accordion-button`).forEach(b =>
+    b.insertAdjacentHTML("beforeend", '<span class="badge bg-success me-2">Today</span>'));
+
+  // deep links from the dashboard: ?open=Monday (or all) and ?pending=1 (hide finished items)
+  const q = new URLSearchParams(location.search);
+  if (items && q.get("open")) items.querySelectorAll(".accordion-item").forEach(g => {
+    if (q.get("open") === "all" || g.dataset.label === q.get("open")) panel(g).show();
+  });
+  if (hideDone && q.get("pending")) { hideDone.checked = true; hideDone.onchange(); }
+</script>
+{% endblock %}

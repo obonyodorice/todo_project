@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+{% block content %}
+<li class="list-group-item item rise d-flex align-items-center gap-3 {% if obj.done == True %}done{% endif %}" style="--i:{{ forloop.counter0 }}">
+  {% if obj.done == True or obj.done == False %}
+  <div class="form-check form-switch m-0"><input class="form-check-input toggle" type="checkbox" role="switch" data-url="{% url name|add:'_toggle' obj.pk %}" {% if obj.done %}checked{% endif %}></div>
+  {% endif %}
+  <div class="flex-grow-1">
+    <div class="label fw-semibold">{{ obj.headline|default:obj }}</div>
+    {% if obj.details %}<div class="small text-muted">{{ obj.details|join:" · " }}</div>{% endif %}
+  </div>
+  {% if obj.link %}<a href="{{ obj.link }}" target="_blank" rel="noopener">Open ↗</a>{% endif %}
+  <a class="btn btn-sm btn-outline-primary" href="{% url name|add:'_edit' obj.pk %}">Edit</a>
+  <a class="btn btn-sm btn-outline-danger" href="{% url name|add:'_delete' obj.pk %}">Delete</a>
+</li>
+{% endblock %}

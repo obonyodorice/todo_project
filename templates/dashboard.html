@@ -1,0 +1,62 @@
+{% extends "./base.html" %}
+{% block content %}
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><path d="M8.2 13.9 7 23l5-3 5 3-1.2-9.1"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></symbol>
+</svg>
+
+<section class="hero p-4 p-md-5 mb-4">
+  <h1 class="fw-bold"><span id="greet">Welcome</span>, {{ student }}! <span class="wave">👋</span></h1>
+  <p class="fs-5 mb-1" id="cheer">Every small step counts. You've got this!</p>
+  <small class="opacity-75" id="today"></small>
+</section>
+
+<p class="text-muted mb-3">Tap any card to jump straight to it.</p>
+<div class="row g-3">
+  {% for t in tiles %}
+  <div class="col-6 col-lg-3 rise" style="--i:{{ forloop.counter }}">
+    <a class="tile lift {{ t.state }}" href="{{ t.url }}">
+      <span class="top"><span class="icon-wrap"><svg class="icon"><use href="#i-{{ t.icon }}"/></svg></span><span class="go">↗</span></span>
+      <span class="num count" data-to="{{ t.count }}">0</span>
+      <span class="fw-bold">{{ t.label }}</span>
+      <span class="note">{{ t.note }}</span>
+      {% if t.progress != None %}<span class="bar" title="{{ t.progress }}% done"><i style="--p:{{ t.progress }}%"></i></span>{% endif %}
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const hour = new Date().getHours();
+  document.getElementById("greet").textContent = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  document.getElementById("today").textContent = new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+  const messages = [
+    "Every small step counts. You've got this!",
+    "Consistency beats cramming. Show up today. ",
+    "Progress, not perfection. Keep going!",
+    "Future you will thank you for today's effort. ",
+    "One topic at a time, you're doing great!",
+    "Believe in your preparation. You're closer than you think. 🚀",
+  ];
+  document.getElementById("cheer").textContent = messages[Math.floor(Date.now() / 864e5) % messages.length];
+
+  document.querySelectorAll(".count").forEach(el => {  // count-up animation
+    const to = +el.dataset.to, start = performance.now();
+    const step = t => {
+      const p = Math.min((t - start) / 800, 1);
+      el.textContent = Math.round(to * p);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+</script>
+{% endblock %}
