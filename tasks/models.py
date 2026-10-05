@@ -224,6 +224,7 @@ class Resource(models.Model):
             raise ValidationError("Upload a file or add a link.")
 
     link = property(lambda self: self.file.url if self.file else self.url)
+    kind = property(lambda self: self.file.name.rsplit(".", 1)[-1].upper() if self.file else "LINK")  # PDF, DOCX, PPTX or LINK
     group = property(lambda self: str(self.subject))
     headline = property(lambda self: self.title)
-    details = property(lambda self: [x for x in (self.notes, self.file.name.rsplit(".", 1)[-1].upper() + " file" if self.file else "Link") if x])
+    details = property(lambda self: [x for x in (self.notes, self.kind + " file" if self.file else "Link") if x])
