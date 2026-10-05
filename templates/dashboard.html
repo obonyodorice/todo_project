@@ -2,13 +2,8 @@
 {% block content %}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
-  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
-  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
-  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><path d="M8.2 13.9 7 23l5-3 5 3-1.2-9.1"/></symbol>
-  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
-  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
-  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
 </svg>
 
 <section class="hero p-4 p-md-5 mb-4">
@@ -17,10 +12,9 @@
   <small class="opacity-75" id="today"></small>
 </section>
 
-<p class="text-muted mb-3">Tap any card to jump straight to it.</p>
 <div class="row g-3">
   {% for t in tiles %}
-  <div class="col-6 col-lg-3 rise" style="--i:{{ forloop.counter }}">
+  <div class="col-12 col-md-4 rise" style="--i:{{ forloop.counter }}">
     <a class="tile lift {{ t.state }}" href="{{ t.url }}">
       <span class="top"><span class="icon-wrap"><svg class="icon"><use href="#i-{{ t.icon }}"/></svg></span><span class="go">↗</span></span>
       <span class="num count" data-to="{{ t.count }}">0</span>
@@ -31,6 +25,26 @@
   </div>
   {% endfor %}
 </div>
+
+<div class="d-flex justify-content-between align-items-center mt-5 mb-2 rise" style="--i:4">
+  <h4 class="m-0">Resources by unit</h4>
+  <a class="btn btn-sm btn-outline-primary" href="{% url 'resource_list' %}">Manage</a>
+</div>
+<div class="card rise" style="--i:5"><div class="table-responsive">
+  <table class="table res-table align-middle mb-0">
+    <thead><tr><th>Unit</th><th>Resources</th></tr></thead>
+    <tbody>
+      {% for u in units %}
+      <tr>
+        <th scope="row">{{ u }}</th>
+        <td>{% for r in u.resource_set.all %}<a class="chip" href="{{ r.link }}" target="_blank" rel="noopener"><span class="ftype ftype-{{ r.kind }}">{{ r.kind }}</span>{{ r.title }}</a>{% endfor %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="2" class="text-center text-muted py-4">No resources yet. Upload your first notes from the Resources page. ✨</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div></div>
 {% endblock %}
 
 {% block scripts %}

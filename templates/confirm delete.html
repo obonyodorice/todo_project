@@ -2,10 +2,11 @@
 {% block content %}
 <div class="row justify-content-center"><div class="col-md-8 col-lg-5">
   <div class="card shadow-sm text-center p-4 rise">
-    <h4>Delete “{{ object }}”?</h4>
-    <p class="text-muted">This can't be undone, and anything linked to it will be deleted too.</p>
+    <div class="icon-wrap mx-auto mb-3" style="width:3.5rem;height:3.5rem"><svg class="icon" style="width:1.6rem;height:1.6rem"><use href="#i-trash"/></svg></div>
+    <h4>Remove “{{ object }}”?</h4>
+    <p class="text-muted">This can't be undone, and anything linked to it will go too.</p>
     <form method="post">{% csrf_token %}
-      <button class="btn btn-danger">Yes, delete</button>
+      <button class="btn btn-danger">Yes, remove it</button>
       <a class="btn btn-secondary" href="javascript:history.back()">Keep it</a>
     </form>
   </div>

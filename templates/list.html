@@ -35,7 +35,7 @@
           </div>
           {% if obj.link %}<a href="{{ obj.link }}" target="_blank" rel="noopener">Open ↗</a>{% endif %}
           <a class="btn btn-sm btn-outline-primary" href="{% url name|add:'_edit' obj.pk %}">Edit</a>
-          <a class="btn btn-sm btn-outline-danger" href="{% url name|add:'_delete' obj.pk %}">Delete</a>
+          <a class="btn btn-sm btn-outline-danger btn-icon" href="{% url name|add:'_remove' obj.pk %}" title="Remove" aria-label="Remove"><svg class="icon"><use href="#i-trash"/></svg></a>
         </div>
         {% endfor %}
       </div>
