@@ -209,5 +209,22 @@ a:hover { color: var(--fg); text-decoration-thickness: 4px; }
 @keyframes blink { 50% { opacity: .25; } }
 @keyframes pulse { from { box-shadow: 0 0 0 0 rgba(var(--teal-rgb), .55); } to { box-shadow: 0 0 0 14px rgba(var(--teal-rgb), 0); } }
 
+/* ============ Icons, icon buttons, resource table ============ */
+.icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.125em; }
+.btn-icon { display: inline-grid; place-items: center; width: 2rem; height: 2rem; padding: 0; border-radius: 50%; }
+.btn-icon .icon { width: 1rem; height: 1rem; }
+.res-table > tbody > tr > th { width: 30%; vertical-align: top; padding: 1rem 1.1rem; background: rgba(var(--teal-rgb), .07); border-right: 3px solid var(--teal); }
+.res-table > tbody > tr > td { padding: .5rem 1.1rem; vertical-align: middle; }
+.res-table .res { padding: .55rem 0; border-bottom: 1px solid var(--line); }
+.res-table .res:last-child { border-bottom: 0; }
+.ftype { display: inline-block; min-width: 3.4rem; text-align: center; font-size: .66rem; font-weight: 800; letter-spacing: .07em; padding: .25em .55em; border-radius: .45rem; border: 1.5px solid var(--fg); }
+.ftype-PDF { background: var(--fg); color: var(--bg); }
+.ftype-DOC, .ftype-DOCX { background: var(--teal); border-color: var(--teal); color: var(--ink); }
+.ftype-PPT, .ftype-PPTX { background: rgba(var(--teal-rgb), .16); border-color: var(--teal); color: var(--fg); }
+.ftype-LINK { background: transparent; color: var(--fg); }
+.chip { display: inline-flex; align-items: center; gap: .5rem; margin: .2rem .35rem .2rem 0; padding: .3rem .8rem .3rem .35rem; border: 1.5px solid var(--line);
+        border-radius: 2rem; font-weight: 600; text-decoration: none; transition: border-color .2s, transform .2s, background .2s; }
+.chip:hover { border-color: var(--teal); background: rgba(var(--teal-rgb), .08); transform: translateY(-2px); text-decoration: none; }
+
 /* ============ Respect reduced-motion settings ============ */
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
