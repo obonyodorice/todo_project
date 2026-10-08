@@ -1,3 +1,8 @@
+.env
+db.sqlite3.backup
+*.pyc
 __pycache__/
 db.sqlite3
 media/
+data.json
+venv/
